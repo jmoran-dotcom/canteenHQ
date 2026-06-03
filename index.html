@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CanteenHQ - Hengoed Primary School</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#cc1212;--red-dark:#a00e0e;--red-light:#e63232;--red-pale:#fdecea;--red-mid:#d42020;
+  --green:#1a5c2a;--green-pale:#e8f5e9;
+  --gold:#f5c518;--amber:#e76f00;--amber-pale:#fff3e0;
+  --bg:#faf5f5;--surface:#fff;--border:#e8d0d0;--text:#1a0a0a;--text-muted:#9a6060;
+  --shadow:0 2px 12px rgba(180,20,20,0.09);--radius:14px;--radius-sm:8px;
+  --font:"DM Sans",sans-serif;--font-display:"DM Serif Display",serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;}
+header{background:linear-gradient(135deg,var(--red-dark) 0%,var(--red) 60%,var(--red-light) 100%);color:#fff;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:72px;position:sticky;top:0;z-index:100;box-shadow:0 3px 20px rgba(150,0,0,0.3);}
+.header-left{display:flex;align-items:center;gap:14px;}
+.school-badge{width:52px;height:52px;border-radius:50%;border:3px solid var(--gold);box-shadow:0 0 0 1px rgba(255,200,0,0.4),0 2px 12px rgba(0,0,0,0.3);flex-shrink:0;object-fit:cover;}
+.brand-name{font-size:22px;font-weight:700;letter-spacing:-0.5px;line-height:1;}
+.brand-name span{color:var(--gold);}
+.brand-school{font-size:11px;opacity:0.8;margin-top:3px;}
+.week-badge{background:rgba(255,255,255,0.15);border:1px solid rgba(255,200,0,0.5);border-radius:20px;padding:5px 14px;font-weight:600;font-size:13px;color:var(--gold);}
+.date-tag{font-size:12px;opacity:0.75;}
+nav{background:var(--surface);border-bottom:2px solid var(--border);padding:0 1.5rem;display:flex;overflow-x:auto;}
+nav button{background:none;border:none;border-bottom:3px solid transparent;padding:13px 18px;font-family:var(--font);font-size:14px;font-weight:500;color:var(--text-muted);cursor:pointer;white-space:nowrap;transition:all 0.15s;margin-bottom:-2px;}
+nav button:hover{color:var(--red);}
+nav button.active{color:var(--red);border-bottom-color:var(--red);font-weight:600;}
+main{padding:1.75rem;max-width:1240px;margin:0 auto;}
+.view{display:none;}.view.active{display:block;}
+.class-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem;gap:1rem;flex-wrap:wrap;}
+.class-title{font-family:var(--font-display);font-size:26px;color:var(--red-dark);line-height:1.2;}
+.class-meta{font-size:13px;color:var(--text-muted);margin-top:3px;}
+.day-btn{padding:7px 16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);font-family:var(--font);font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;transition:all 0.15s;}
+.day-btn:hover{background:var(--red-pale);color:var(--red);}
+.day-btn.active{background:var(--red);color:#fff;border-color:var(--red);}
+.menu-panel{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--red);border-radius:var(--radius);padding:1.1rem 1.25rem;margin-bottom:1.25rem;box-shadow:var(--shadow);}
+.menu-panel-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:10px;}
+.menu-columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;}
+.menu-col-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);margin-bottom:5px;}
+.menu-item{font-size:13px;color:var(--text);padding:3px 0;border-bottom:1px dashed var(--border);line-height:1.4;}
+.menu-item:last-child{border-bottom:none;}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:10px;margin-bottom:1.25rem;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;box-shadow:var(--shadow);}
+.stat-number{font-size:26px;font-weight:700;color:var(--red);font-family:var(--font-display);}
+.stat-label{font-size:11px;color:var(--text-muted);margin-top:3px;}
+.register-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+@media(max-width:900px){.register-layout{grid-template-columns:1fr;}}
+.pupil-list-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+.panel-header{background:#fdf0f0;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.panel-header-title{font-size:14px;font-weight:600;color:var(--red-dark);}
+.progress-bar-wrap{background:rgba(180,20,20,0.12);border-radius:99px;height:6px;width:90px;}
+.progress-bar-fill{background:var(--red);border-radius:99px;height:6px;transition:width 0.4s;}
+.pupil-scroll{max-height:500px;overflow-y:auto;}
+.pupil-row{display:flex;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.12s;gap:10px;}
+.pupil-row:last-child{border-bottom:none;}
+.pupil-row:hover{background:#fdf5f5;}
+.pupil-row.selected{background:#fdecea;}
+.pupil-row.done{opacity:0.5;}
+.pupil-row.late-row{border-left:3px solid var(--amber);cursor:default;}
+.pupil-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.pupil-name{font-size:13px;font-weight:500;flex:1;}
+.pupil-choice-badge{font-size:11px;padding:2px 9px;border-radius:20px;font-weight:500;max-width:145px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.badge-packed{background:var(--amber-pale);color:var(--amber);}
+.badge-absent{background:var(--red-pale);color:var(--red);}
+.badge-meal{background:var(--green-pale);color:var(--green);}
+.badge-pending{background:#f0f0f0;color:#999;}
+.badge-late{background:var(--amber-pale);color:var(--amber);}
+.choice-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+.choice-panel-header{padding:16px 18px 12px;border-bottom:2px solid var(--red-pale);background:linear-gradient(to right,var(--red-pale),#fff);}
+.choice-pupil-name{font-family:var(--font-display);font-size:21px;color:var(--red-dark);}
+.choice-instruction{font-size:12px;color:var(--text-muted);margin-top:3px;}
+.choice-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);padding:12px 18px 6px;}
+.option-btn{display:flex;align-items:center;gap:9px;width:calc(100% - 36px);margin:3px 18px;padding:10px 14px;background:none;border:1.5px solid var(--border);border-radius:var(--radius-sm);text-align:left;font-family:var(--font);font-size:13px;color:var(--text);cursor:pointer;transition:all 0.15s;}
+.option-btn:hover{border-color:var(--red);background:var(--red-pale);color:var(--red-dark);}
+.option-btn.selected{border-color:var(--red);background:var(--red);color:#fff;}
+.filling-group{margin:2px 18px 8px;background:var(--bg);border:1.5px solid #f0c0c0;border-radius:var(--radius-sm);overflow:hidden;}
+.filling-group-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--red-dark);padding:7px 12px 5px;border-bottom:1px solid #f0c0c0;}
+.filling-btn{display:flex;align-items:center;gap:9px;width:100%;padding:10px 12px;background:none;border:none;border-bottom:1px solid #f0c0c0;text-align:left;font-family:var(--font);font-size:13px;color:var(--text);cursor:pointer;transition:all 0.15s;}
+.filling-btn:last-child{border-bottom:none;}
+.filling-btn:hover{background:var(--red-pale);color:var(--red-dark);}
+.filling-btn.selected{background:var(--red);color:#fff;}
+.filling-dot{width:10px;height:10px;border-radius:50%;border:2px solid currentColor;flex-shrink:0;}
+.option-icon{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.special-options{padding:0 18px 18px;display:flex;gap:9px;margin-top:6px;}
+.special-btn{flex:1;padding:11px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:none;font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;}
+.special-btn.packed:hover,.special-btn.packed.selected{background:var(--amber-pale);border-color:var(--amber);color:var(--amber);}
+.special-btn.absent:hover,.special-btn.absent.selected{background:var(--red-pale);border-color:var(--red);color:var(--red);}
+.confirm-btn{display:block;width:calc(100% - 36px);margin:6px 18px 18px;padding:13px;background:var(--red);color:#fff;border:none;border-radius:var(--radius-sm);font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;}
+.confirm-btn:hover{background:var(--red-dark);}
+.empty-choice{padding:2.5rem 1.5rem;text-align:center;color:var(--text-muted);}
+.empty-choice-icon{font-size:44px;margin-bottom:10px;}
+.allergen-note{font-size:11px;color:var(--text-muted);font-style:italic;padding:2px 18px 10px;}
+.late-banner{background:#fff8f0;border:1px solid #f0c890;border-radius:var(--radius);padding:.9rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.late-banner-text{font-size:14px;font-weight:600;color:var(--amber);}
+.late-banner-sub{font-size:12px;color:#b06020;margin-top:2px;}
+.late-add-btn{background:var(--amber);color:#fff;border:none;padding:9px 16px;border-radius:var(--radius-sm);font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;}
+.modal-overlay{position:fixed;inset:0;background:rgba(80,0,0,0.4);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.modal{background:var(--surface);border-radius:var(--radius);padding:1.75rem;max-width:500px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.25);max-height:90vh;overflow-y:auto;}
+.modal-title{font-family:var(--font-display);font-size:22px;color:var(--amber);margin-bottom:6px;}
+.modal-sub{font-size:13px;color:var(--text-muted);margin-bottom:1.25rem;}
+.modal-input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font);font-size:14px;color:var(--text);background:var(--bg);margin-bottom:.9rem;}
+.modal-input:focus{outline:none;border-color:var(--amber);}
+.modal-field-label{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;}
+.modal-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:.9rem;}
+.modal-cancel{padding:9px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:none;font-family:var(--font);font-size:14px;cursor:pointer;}
+.modal-confirm{padding:9px 16px;background:var(--amber);color:#fff;border:none;border-radius:var(--radius-sm);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;}
+.kitchen-header{background:linear-gradient(135deg,var(--red-dark),var(--red-mid));color:#fff;padding:1.75rem;border-radius:var(--radius);margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.kitchen-header-left{display:flex;align-items:center;gap:14px;}
+.kitchen-badge{width:50px;height:50px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;}
+.kitchen-title{font-family:var(--font-display);font-size:24px;}
+.kitchen-subtitle{font-size:13px;opacity:0.8;margin-top:3px;}
+.print-btn{background:var(--gold);color:#1a0a0a;border:none;padding:10px 18px;border-radius:var(--radius-sm);font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;}
+.week-controls{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:9px 14px;margin-bottom:1.25rem;flex-wrap:wrap;}
+.week-controls label{font-size:12px;color:var(--text-muted);font-weight:500;}
+.week-controls select{border:1px solid var(--border);border-radius:var(--radius-sm);padding:5px 10px;font-family:var(--font);font-size:13px;background:var(--bg);}
+.kitchen-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.25rem;margin-bottom:1.25rem;}
+.kitchen-class-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+.kcc-header{padding:12px 16px;font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:space-between;color:#fff;}
+.kcc-body{padding:10px 16px;}
+.kcc-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;gap:6px;}
+.kcc-row:last-child{border-bottom:none;}
+.kcc-item{color:var(--text);flex:1;}
+.kcc-count{font-weight:700;font-size:15px;color:var(--red);min-width:28px;text-align:right;}
+.totals-card{background:var(--surface);border:2px solid var(--red);border-radius:var(--radius);padding:1.25rem;box-shadow:var(--shadow);margin-bottom:1.25rem;}
+.totals-title{font-family:var(--font-display);font-size:19px;color:var(--red-dark);margin-bottom:.9rem;}
+.totals-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.total-item{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:var(--bg);border-radius:var(--radius-sm);font-size:13px;}
+.total-item-count{font-weight:700;font-size:17px;color:var(--red);}
+.kitchen-pupils-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:1.25rem;}
+.kps-header{background:#fdf0f0;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--border);flex-wrap:wrap;gap:8px;}
+.kps-title{font-size:15px;font-weight:700;color:var(--red-dark);}
+.kps-filter{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:none;font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;color:var(--text-muted);}
+.kps-filter.active{background:var(--red);color:#fff;border-color:var(--red);}
+.kps-search{padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font);font-size:13px;background:var(--bg);color:var(--text);width:190px;}
+.kps-search:focus{outline:none;border-color:var(--red);}
+.kitchen-pupil-table{width:100%;border-collapse:collapse;}
+.kitchen-pupil-table th{background:#faf0f0;padding:9px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--red-dark);border-bottom:2px solid var(--border);}
+.kitchen-pupil-table td{padding:9px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;}
+.kitchen-pupil-table tr:last-child td{border-bottom:none;}
+.kitchen-pupil-table tr:hover td{background:#fdf8f8;}
+.kitchen-pupil-table tr.late-kitrow td{border-left:3px solid var(--amber);}
+.meal-chip{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:500;}
+.chip-meal{background:var(--green-pale);color:var(--green);}
+.chip-packed{background:var(--amber-pale);color:var(--amber);}
+.chip-absent{background:var(--red-pale);color:var(--red);}
+.chip-late{background:var(--amber-pale);color:var(--amber);font-size:10px;padding:2px 7px;border-radius:10px;margin-left:4px;}
+.chip-pending{background:#f0f0f0;color:#999;}
+.late-kitchen-section{margin-top:1.25rem;background:#fff8f0;border:1px solid #f0c890;border-radius:var(--radius);padding:1.25rem;}
+.late-kitchen-title{font-family:var(--font-display);font-size:17px;color:var(--amber);margin-bottom:.9rem;}
+.late-kitchen-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:9px;}
+.late-item{background:var(--surface);border:1px solid #f0c890;border-radius:var(--radius-sm);padding:9px 12px;}
+.late-item-name{font-weight:600;}
+.late-item-class{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.late-item-meal{font-size:12px;color:var(--amber);font-weight:500;margin-top:4px;}
+.status-dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px;}
+.dot-complete{background:#52b788;}.dot-partial{background:var(--amber);}.dot-none{background:#ddd;}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;color:#fff;padding:11px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;box-shadow:0 4px 20px rgba(0,0,0,0.2);transform:translateY(80px);opacity:0;transition:all 0.3s;z-index:999;max-width:280px;background:var(--green);}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.is-orange{background:var(--amber);}
+.toast.is-red{background:var(--red);}
+@media print{header,nav,.no-print{display:none!important;}body{background:#fff;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <img class="school-badge" src="logo.png" alt="Hengoed Primary School">
+    <div>
+      <div class="brand-name">Canteen<span>HQ</span></div>
+      <div class="brand-school">Hengoed Primary School</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <span class="date-tag" id="dateDisplay"></span>
+    <span class="week-badge" id="weekBadge">Week 1</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="switchView('seren',this)">Seren Bach</button>
+  <button onclick="switchView('y23',this)">Year 2/3</button>
+  <button onclick="switchView('y45',this)">Year 4/5</button>
+  <button onclick="switchView('y56',this)">Year 5/6</button>
+  <button onclick="switchView('kitchen',this)">Kitchen</button>
+</nav>
+<main>
+  <div id="view-seren" class="view active"></div>
+  <div id="view-y23" class="view"></div>
+  <div id="view-y45" class="view"></div>
+  <div id="view-y56" class="view"></div>
+  <div id="view-kitchen" class="view">
+    <div class="kitchen-header">
+      <div class="kitchen-header-left">
+        <img class="kitchen-badge" src="logo.png" alt="Badge">
+        <div>
+          <div class="kitchen-title">Kitchen Summary</div>
+          <div class="kitchen-subtitle">Live orders - verify each child at the serving point</div>
+        </div>
+      </div>
+      <button class="print-btn no-print" onclick="window.print()">Print Sheet</button>
+    </div>
+    <div class="week-controls no-print">
+      <label>Viewing:</label>
+      <select id="kitchenWeek" onchange="renderKitchen()">
+        <option value="1">Week 1</option>
+        <option value="2">Week 2</option>
+        <option value="3">Week 3</option>
+      </select>
+      <select id="kitchenDay" onchange="renderKitchen()">
+        <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+        <option>Thursday</option><option>Friday</option>
+      </select>
+    </div>
+    <div class="stats-row" id="kitchenStats"></div>
+    <div class="kitchen-grid" id="kitchenClassCards"></div>
+    <div class="totals-card">
+      <div class="totals-title">Total Meals Required</div>
+      <div class="totals-grid" id="kitchenTotals"></div>
+    </div>
+    <div class="kitchen-pupils-section">
+      <div class="kps-header">
+        <div class="kps-title">All Pupils - Meal Verification</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <input class="kps-search" id="kpsSearch" placeholder="Search pupil..." oninput="filterKT()">
+          <button class="kps-filter active" onclick="setKF('all',this)">All</button>
+          <button class="kps-filter" onclick="setKF('meal',this)">Meals</button>
+          <button class="kps-filter" onclick="setKF('packed',this)">Packed</button>
+          <button class="kps-filter" onclick="setKF('absent',this)">Absent</button>
+          <button class="kps-filter" onclick="setKF('pending',this)">Pending</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="kitchen-pupil-table">
+          <thead><tr><th>#</th><th>Pupil Name</th><th>Class</th><th>Meal Choice</th><th>Status</th></tr></thead>
+          <tbody id="kitchenPupilBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div id="lateKitchenSection" class="late-kitchen-section" style="display:none;">
+      <div class="late-kitchen-title">Late Arrivals</div>
+      <div class="late-kitchen-grid" id="lateKitchenList"></div>
+    </div>
+  </div>
+</main>
+<div class="modal-overlay" id="lateModal" style="display:none;" onclick="if(event.target===this)closeLateModal()">
+  <div class="modal">
+    <div class="modal-title">Late Arrival</div>
+    <div class="modal-sub">Enter the pupil name, class, and meal choice.</div>
+    <div class="modal-field-label">Pupil Name</div>
+    <input class="modal-input" id="lateName" placeholder="e.g. Seren Hughes" autocomplete="off">
+    <div class="modal-field-label">Class</div>
+    <select class="modal-input" id="lateClass">
+      <option value="seren">Seren Bach</option>
+      <option value="y23">Year 2/3</option>
+      <option value="y45">Year 4/5</option>
+      <option value="y56">Year 5/6</option>
+    </select>
+    <div class="modal-field-label">Meal Choice</div>
+    <div id="lateMenuOptions"></div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeLateModal()">Cancel</button>
+      <button class="modal-confirm" onclick="confirmLateArrival()">Add to Register</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
